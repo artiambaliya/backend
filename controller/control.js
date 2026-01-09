@@ -1,16 +1,16 @@
 const user = require("../models/model");
 
 
-const handleAllGet = async (req, res) => {
+const handleAllGet = async (req, res, next) => {
     try {
         const getData = await user.find({})
         return res.status(200).json(getData)
     } catch (err) {
-        return res.status(500).json({ msg: "server error" });
+        next(err)
     }
 }
 
-const handleAllPost = async (req, res) => {
+const handleAllPost = async (req, res, next) => {
     const users = new user({
         notes: req.body.notes
     });
@@ -19,25 +19,27 @@ const handleAllPost = async (req, res) => {
         const postData = await users.save()
         return res.status(201).json(postData)
     } catch (err) {
-        return res.status(500).json({ message: err.message })
+        next(err)
     }
 }
 
-const handleGetById = async (req, res) => {
+const handleGetById = async (req, res, next) => {
     try {
         const getId = await user.findById(req.params.id)
 
         if (!getId) {
-            return res.status(404).json({ message: "not found" });
+            const err = new Error("user not found");
+            err.status = 400;
+            throw err;
         }
         return res.status(200).json(getId);
     } catch (err) {
-        return res.status(500).json({ message: err.message });
+        next(err);
     }
 }
 
 
-const handlePatchById = async (req, res) => {
+const handlePatchById = async (req, res, next) => {
     try {
         const result = await user.findByIdAndUpdate(
             req.params.id,
@@ -46,25 +48,29 @@ const handlePatchById = async (req, res) => {
         );
 
         if (!result) {
-            return res.status(404).json({ message: "not found" });
+           const err = new Error("user not founded");
+           err.status = 404;
+           throw err;
         }
         return res.status(200).json(result);
     } catch (err) {
-        return res.status(500).json({ message: err.message });
+        next(err);
     }
 }
 
 
-const handleDeleteById = async (req, res) => {
+const handleDeleteById = async (req, res, next) => {
     try {
         const deleteReq = await user.findByIdAndDelete(req.params.id)
 
         if (!deleteReq) {
-            return res.status(404).json({ message: "not founded" });
+            const err = new Error("user not founded");
+            err.status = 404;
+            throw err;
         }
         return res.status(200).json(deleteReq)
     } catch (err) {
-        return res.status(500).json({ message: err.message })
+        next(err);    
     }
 }
 

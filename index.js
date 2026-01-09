@@ -1,14 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const allRoutes = require("./routes/route")
+const allRoutes = require("./routes/route");
+require("dotenv").config();
+const errorHandler = require("./middleware/errorHandler")
 
 
 const app = express()
 app.use(express.json());
 
-mongoose.connect("mongodb://admin:admin123@127.0.0.1:27017/notesApp?authSource=admin")
+mongoose.connect(process.env.MONGO_URL)
 .then(() => console.log("connected !"))
 
 app.use("/", allRoutes)
+app.use(errorHandler);
 
 app.listen(8000, () => console.log("server is running"));
