@@ -1,10 +1,15 @@
 const errorHandler = (err, req, res, next) => {
-    const statusCode = err.statusCode || 500;
+    const statusCode = err.status || 500;
+    console.log(err);
+
+    
 
     res.status(statusCode).json({
         success : false,
-        message : err.message || "internal server error"
+        message : err.message || "something went worng"
     });
-};
+
+
+}
 
 module.exports = errorHandler;

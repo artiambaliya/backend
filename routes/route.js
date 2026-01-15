@@ -11,12 +11,16 @@ const {
 const route = express.Router();
 
 
-
-
 route.get("/", handleAllGet);
+
 route.post("/", handleAllPost);
+
 route.get("/:id", handleGetById);
+
 route.patch("/:id", handlePatchById);
+
 route.delete("/:id", handleDeleteById);
+
+
 
 module.exports = route
