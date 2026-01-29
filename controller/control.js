@@ -62,21 +62,16 @@ const handlePatchById = async (req, res, next) => {
 }
 
 
+
 const handleDeleteById = async (req, res, next) => {
     try {
         const deleteReq = await user.findByIdAndDelete(req.params.id)
-
-        if(!deleteReq){
-            const err = new Error("there something wrong")
-            err.status = 404;
-           return next(err);
-        }
-
         return res.status(200).json(deleteReq)
     } catch (err) {
          next(err);
     }
 }
+
 
 
 module.exports = {
